@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import Icon from "@/components/ui/icon";
 
 interface InfoCardProps {
@@ -9,44 +9,49 @@ interface InfoCardProps {
 }
 
 const InfoCard: React.FC<InfoCardProps> = ({ isOn, timeOn }) => {
-  const formatTime = (seconds: number): string => {
-    if (seconds < 60) return `${seconds} сек.`;
+  // Форматирование времени в формат MM:SS
+  const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes} мин. ${remainingSeconds} сек.`;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  // Получаем текущую дату и время
-  const now = new Date();
-  const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-
+  // Расчет потребляемой энергии (для примера, условные значения)
+  const energyUsed = timeOn * 0.06; // 60 Вт в час = 0.06 Вт в секунду
+  
   return (
-    <Card className="w-full max-w-sm bg-secondary/80 backdrop-blur">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Icon name={isOn ? "Lightbulb" : "LightbulbOff"} />
-          Состояние лампочки
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground">Статус:</span>
-          <span className={`font-semibold ${isOn ? 'text-primary' : 'text-muted-foreground'}`}>
-            {isOn ? 'Включена' : 'Выключена'}
-          </span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground">Время работы:</span>
-          <span className="font-medium">{formatTime(timeOn)}</span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground">Текущее время:</span>
-          <span className="font-medium">{currentTime}</span>
+    <Card className="overflow-hidden">
+      <CardContent className="p-4">
+        <div className="space-y-2">
+          <div className="flex justify-between items-center px-2 py-1 rounded-md bg-secondary/40">
+            <div className="flex items-center">
+              <Icon name="Zap" className={`mr-2 ${isOn ? 'text-yellow-400' : 'text-gray-500'}`} size={18} />
+              <span>Статус:</span>
+            </div>
+            <span className={`font-bold ${isOn ? 'text-primary' : 'text-gray-500'}`}>
+              {isOn ? 'Включена' : 'Выключена'}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center px-2 py-1 rounded-md bg-secondary/40">
+            <div className="flex items-center">
+              <Icon name="Clock" className="mr-2" size={18} />
+              <span>Время работы:</span>
+            </div>
+            <span className="font-mono">{formatTime(timeOn)}</span>
+          </div>
+
+          {isOn && (
+            <div className="flex justify-between items-center px-2 py-1 rounded-md bg-secondary/40">
+              <div className="flex items-center">
+                <Icon name="Bolt" className="mr-2 text-yellow-400" size={18} />
+                <span>Потреблено энергии:</span>
+              </div>
+              <span className="font-mono">{energyUsed.toFixed(2)} Вт</span>
+            </div>
+          )}
         </div>
       </CardContent>
-      <CardFooter className="pt-0 text-xs text-muted-foreground">
-        <p>Нажмите на переключатель чтобы изменить состояние</p>
-      </CardFooter>
     </Card>
   );
 };
