@@ -10,7 +10,6 @@ const Index = () => {
   const [timeOn, setTimeOn] = useState(0);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // Эффект для отслеживания времени работы лампочки
   useEffect(() => {
     if (isOn) {
       const interval = setInterval(() => {
@@ -27,12 +26,10 @@ const Index = () => {
     };
   }, [isOn]);
 
-  // Функция переключения лампочки
   const toggleLight = () => {
     setIsOn((prev) => !prev);
   };
 
-  // Сброс счетчика
   const resetTimer = () => {
     setTimeOn(0);
   };
@@ -49,9 +46,9 @@ const Index = () => {
       </header>
 
       <main className="flex-1 w-full max-w-4xl mx-auto flex flex-col items-center justify-center px-4 py-8">
-        <div className="relative mb-6">
+        <div className="relative mb-6 flex flex-col items-center">
           {/* Подвес лампочки */}
-          <div className="h-16 w-2 bg-gradient-to-b from-[#333] to-[#222] mx-auto mb-2"></div>
+          <div className="h-16 w-2 bg-gradient-to-b from-[#333] to-[#222] mb-2"></div>
 
           {/* Компонент лампочки - добавляем возможность кликать по ней */}
           <LampBulb isOn={isOn} toggle={toggleLight} />
