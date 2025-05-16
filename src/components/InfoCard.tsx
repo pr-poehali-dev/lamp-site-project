@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Icon from "@/components/ui/icon";
 
 interface InfoCardProps {
@@ -9,47 +9,46 @@ interface InfoCardProps {
 }
 
 const InfoCard: React.FC<InfoCardProps> = ({ isOn, timeOn }) => {
-  // Форматирование времени в формат MM:SS
+  // Форматируем время в формат "чч:мм:сс"
   const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    
+    return [
+      hours.toString().padStart(2, "0"),
+      minutes.toString().padStart(2, "0"),
+      secs.toString().padStart(2, "0"),
+    ].join(":");
   };
 
-  // Расчет потребляемой энергии (для примера, условные значения)
-  const energyUsed = timeOn * 0.06; // 60 Вт в час = 0.06 Вт в секунду
-  
+  // Расчет потребленной энергии (условно: 60 Вт * время в часах)
+  const energyConsumption = isOn ? (60 * timeOn / 3600).toFixed(4) : 0;
+
   return (
-    <Card className="overflow-hidden">
-      <CardContent className="p-4">
-        <div className="space-y-2">
-          <div className="flex justify-between items-center px-2 py-1 rounded-md bg-secondary/40">
-            <div className="flex items-center">
-              <Icon name="Zap" className={`mr-2 ${isOn ? 'text-yellow-400' : 'text-gray-500'}`} size={18} />
-              <span>Статус:</span>
-            </div>
-            <span className={`font-bold ${isOn ? 'text-primary' : 'text-gray-500'}`}>
-              {isOn ? 'Включена' : 'Выключена'}
-            </span>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <span>Информация</span>
+          <span className={`flex items-center text-sm ${isOn ? "text-green-500" : "text-red-500"}`}>
+            <Icon name={isOn ? "Power" : "PowerOff"} className="mr-1" size={16} />
+            {isOn ? "Включено" : "Выключено"}
+          </span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1">
+            <div className="text-sm text-muted-foreground">Время работы:</div>
+            <div className="text-lg font-mono">{formatTime(timeOn)}</div>
           </div>
-
-          <div className="flex justify-between items-center px-2 py-1 rounded-md bg-secondary/40">
-            <div className="flex items-center">
-              <Icon name="Clock" className="mr-2" size={18} />
-              <span>Время работы:</span>
+          
+          <div className="flex flex-col gap-1">
+            <div className="text-sm text-muted-foreground">Потребление энергии:</div>
+            <div className="text-lg font-mono">
+              {isOn ? `${energyConsumption} Вт*ч` : "0.0000 Вт*ч"}
             </div>
-            <span className="font-mono">{formatTime(timeOn)}</span>
           </div>
-
-          {isOn && (
-            <div className="flex justify-between items-center px-2 py-1 rounded-md bg-secondary/40">
-              <div className="flex items-center">
-                <Icon name="Bolt" className="mr-2 text-yellow-400" size={18} />
-                <span>Потреблено энергии:</span>
-              </div>
-              <span className="font-mono">{energyUsed.toFixed(2)} Вт</span>
-            </div>
-          )}
         </div>
       </CardContent>
     </Card>
