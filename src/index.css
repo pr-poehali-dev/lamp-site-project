@@ -1,9 +1,8 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 
 @layer base {
   :root {
@@ -37,11 +36,11 @@
 
     --radius: 0.5rem;
   }
-  
+
   * {
     @apply border-border;
   }
-  
+
   body {
     @apply bg-background text-foreground font-montserrat;
   }
@@ -49,26 +48,34 @@
 
 @layer components {
   .bulb-on {
-    filter: drop-shadow(0 0 15px theme('colors.primary'));
+    filter: drop-shadow(0 0 15px theme("colors.primary.DEFAULT"));
     animation: glow 2s infinite alternate;
   }
-  
+
   .light-off {
-    background: radial-gradient(circle at center, transparent, rgba(0, 0, 0, 0.9) 70%);
+    background: radial-gradient(
+      circle at center,
+      transparent,
+      rgba(0, 0, 0, 0.9) 70%
+    );
     transition: all 0.4s ease-out;
   }
-  
+
   .light-on {
-    background: radial-gradient(circle at center, rgba(255, 193, 7, 0.3), rgba(0, 0, 0, 0.95) 75%);
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 193, 7, 0.3),
+      rgba(0, 0, 0, 0.95) 75%
+    );
     transition: all 0.4s ease-in;
   }
 }
 
 @keyframes glow {
   from {
-    filter: drop-shadow(0 0 10px theme('colors.primary'));
+    filter: drop-shadow(0 0 10px theme("colors.primary.DEFAULT"));
   }
   to {
-    filter: drop-shadow(0 0 25px theme('colors.primary'));
+    filter: drop-shadow(0 0 25px theme("colors.primary.DEFAULT"));
   }
 }
